@@ -8,6 +8,13 @@ import Button from "@/components/ui/Button";
 import Badge from "@/components/ui/Badge";
 import EmptyState from "@/components/ui/EmptyState";
 
+// ✅ Import Prisma types
+import { User, Kyc } from "@prisma/client";
+
+type UserWithKYC = User & {
+  kyc: Kyc | null;
+};
+
 export default async function AdminDashboard() {
   const session = await getServerSession(authOptions);
 
@@ -15,7 +22,7 @@ export default async function AdminDashboard() {
     redirect("/dashboard");
   }
 
-  const users = await db.user.findMany({
+  const users: UserWithKYC[] = await db.user.findMany({
     include: { kyc: true },
   });
 
@@ -78,7 +85,11 @@ export default async function AdminDashboard() {
                     )}
                   </p>
 
-                  <form action="/api/admin/freeze-user" method="POST" className="mt-2">
+                  <form
+                    action="/api/admin/freeze-user"
+                    method="POST"
+                    className="mt-2"
+                  >
                     <input type="hidden" name="userId" value={user.id} />
                     <input
                       type="hidden"
