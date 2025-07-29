@@ -1,4 +1,4 @@
-# Stage 1: Install dependencies and build Next.js app
+# Stage 1: Install dependencies and build
 FROM node:18-alpine AS builder
 
 WORKDIR /app
@@ -6,9 +6,11 @@ WORKDIR /app
 COPY package*.json ./
 COPY tsconfig.json ./
 COPY next.config.ts ./
+COPY prisma ./prisma
 COPY . .
 
 RUN npm install
+RUN npx prisma generate
 RUN npm run build
 
 # Stage 2: Production image
@@ -27,5 +29,4 @@ RUN npm install --omit=dev
 EXPOSE 3000
 EXPOSE 3001
 
-# Run both Next.js and server.mjs (Socket.io)
-CMD ["sh", "-c", "node server.mjs & npm start"]
+CMD ["npm", "start"]

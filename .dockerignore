@@ -4,5 +4,5 @@ Dockerfile
 docker-compose.yml
 npm-debug.log
 .env
-/prisma/**
+/pnpm-lock.yaml
 /.pnp
