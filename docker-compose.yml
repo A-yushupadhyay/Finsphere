@@ -1,0 +1,13 @@
+
+
+services:
+  web:
+    build: .
+    ports:
+      - "3000:3000"  # Next.js
+      - "3001:3001"  # Socket.io
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - .env
+    restart: unless-stopped

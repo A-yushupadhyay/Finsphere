@@ -1,15 +1,18 @@
-// ✅ Route: /pages/api/admin/kyc-submissions.ts
-
-import { NextApiRequest, NextApiResponse } from 'next';
-import { db } from "@/lib/db";
+// File: src/app/api/admin/kyc-submissions/route.ts
+import { NextRequest } from 'next/server';
+import { db } from '@/lib/db';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const session = await getServerSession(req, res, authOptions);
+export async function GET(req: NextRequest) {
+  const session = await getServerSession(authOptions);
+  console.log('Session:', session);
+  console.log('Request URL:', req.url);
 
   if (!session || session.user.role !== 'admin') {
-    return res.status(401).json({ message: 'Unauthorized' });
+    return new Response(JSON.stringify({ message: 'Unauthorized' }), {
+      status: 401,
+    });
   }
 
   try {
@@ -25,9 +28,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
     });
 
-    res.status(200).json({ kyc: kycs }); // ✅ Make sure it's wrapped in a key if frontend expects { kyc: [...] }
+    return new Response(JSON.stringify({ kyc: kycs }), {
+      status: 200,
+    });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Failed to fetch KYC submissions.' });
+    console.error('KYC Fetch Error:', err);
+    return new Response(JSON.stringify({ message: 'Failed to fetch KYC submissions.' }), {
+      status: 500,
+    });
   }
 }
