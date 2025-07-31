@@ -40,7 +40,10 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-/src/generated/prisma
+# Keep Prisma schema and migrations
+!prisma/schema.prisma
+!prisma/migrations/**
 
-// Ignore all files in the prisma directory
-/prisma/**
+# Allow generated Prisma client
+!node_modules/.prisma/client
+
