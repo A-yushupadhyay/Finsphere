@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: smartbank-app
+    env: docker
+    region: singapore
+    plan: free
+    branch: main
+    dockerContext: .
+    dockerfilePath: Dockerfile
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
