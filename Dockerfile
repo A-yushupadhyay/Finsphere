@@ -1,36 +1,45 @@
-# Stage 1: Build and generate Prisma client
+# ----------------------------------
+# Stage 1: Build and Prisma Generate
+# ----------------------------------
 FROM node:18-alpine AS builder
 
 WORKDIR /app
 
+# Copy project files
 COPY package*.json ./
 COPY tsconfig.json ./
 COPY next.config.ts ./
+COPY server.mjs ./
 COPY prisma ./prisma
-COPY . ./
+COPY public ./public
+COPY src ./src
 
+# Install deps and generate Prisma Client
 RUN npm install
 RUN npx prisma generate
 RUN npm run build
 
-# Stage 2: Production image
+# ----------------------------------
+# Stage 2: Production Image
+# ----------------------------------
 FROM node:18-alpine
 
 WORKDIR /app
 
-# Copy node modules and built files
-COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/node_modules ./node_modules
+# Copy only necessary files
+COPY package*.json ./
+COPY tsconfig.json ./
+COPY next.config.ts ./
+COPY server.mjs ./
+COPY public ./public
+COPY prisma ./prisma
 COPY --from=builder /app/.next ./.next
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/next.config.ts ./
-COPY --from=builder /app/server.mjs ./
-COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/.prisma ./node_modules/.prisma  
+COPY --from=builder /app/node_modules ./node_modules
 
+# Environment
 ENV NODE_ENV=production
 
 EXPOSE 3000
-EXPOSE 3001
 
+# Run the server
 CMD ["node", "server.mjs"]
