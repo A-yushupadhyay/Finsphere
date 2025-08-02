@@ -2,9 +2,9 @@ name: 🚀 Deploy to Render via Docker
 
 on:
   push:
-    branches: [main]
+    branches: [main] # Only deploy on push to main
   pull_request:
-    branches: [main]
+    branches: [main] # Can also validate on PRs
 
 jobs:
   build-and-deploy:
@@ -34,14 +34,14 @@ jobs:
         env:
           NODE_ENV: production
 
-      - name: 🧪 Run Tests (future optional)
-        run: echo "No test suite yet — placeholder"
+      - name: 🧪 (Optional) Run Tests
+        run: echo "✅ No test suite yet – skipping tests"
         continue-on-error: true
 
       - name: 🚀 Deploy to Render via Webhook
         if: github.ref == 'refs/heads/main'
         run: |
-          echo "Deploying to Render..."
+          echo "Triggering deploy to Render..."
           curl -X GET "$RENDER_DEPLOY_HOOK"
         env:
           RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
