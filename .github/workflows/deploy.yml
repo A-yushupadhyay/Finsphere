@@ -2,9 +2,9 @@ name: 🚀 Deploy to Render via Docker
 
 on:
   push:
-    branches: [main] # Only deploy on push to main
+    branches: [main]
   pull_request:
-    branches: [main] # Can also validate on PRs
+    branches: [main]
 
 jobs:
   build-and-deploy:
@@ -26,6 +26,8 @@ jobs:
 
       - name: 🔄 Generate Prisma Client
         run: npx prisma generate
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
       - name: ✅ Validate Schema & Build App
         run: |
@@ -33,15 +35,16 @@ jobs:
           npm run build
         env:
           NODE_ENV: production
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-      - name: 🧪 (Optional) Run Tests
-        run: echo "✅ No test suite yet – skipping tests"
+      - name: 🧪 Run Tests (future optional)
+        run: echo "No test suite yet — placeholder"
         continue-on-error: true
 
       - name: 🚀 Deploy to Render via Webhook
         if: github.ref == 'refs/heads/main'
         run: |
-          echo "Triggering deploy to Render..."
+          echo "Deploying to Render..."
           curl -X GET "$RENDER_DEPLOY_HOOK"
         env:
           RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
