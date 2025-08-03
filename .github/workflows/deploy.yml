@@ -1,58 +1,44 @@
-name: 🚀 Deploy to Render via Docker
+name: Deploy to Vercel
 
 on:
   push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    branches:
+      - main  # Trigger on push to main branch
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📥 Checkout code
+      - name: ⬇️ Checkout code
         uses: actions/checkout@v3
 
-      - name: 🟢 Setup Node.js
+      - name: 📦 Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: '18'
 
-      - name: 📦 Install dependencies
+      - name: 📥 Install dependencies
         run: npm ci
-        env:
-          NODE_ENV: production
 
-      - name: 🔄 Generate Prisma Client
-        run: npx prisma generate
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-
-      - name: ✅ Validate Schema
-        run: npx prisma validate
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-
-      - name: 🔧 Push Prisma Schema (Optional for migrations)
+      - name: 🧬 Prisma DB Push to Railway
         run: npx prisma db push
         env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          DATABASE_URL: ${{ secrets.RAILWAY_DATABASE_URL }}
 
-      - name: 🏗 Build App
+      - name: ⚙️ Build Next.js App
         run: npm run build
-        env:
-          NODE_ENV: production
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
-      - name: 🧪 Run Tests (future optional)
-        run: echo "No test suite yet — placeholder"
-        continue-on-error: true
-
-      - name: 🚀 Deploy to Render via Webhook
-        if: github.ref == 'refs/heads/main'
+      - name: 🚀 Deploy to Vercel
         run: |
-          echo "Deploying to Render..."
-          curl -X GET "$RENDER_DEPLOY_HOOK"
+          npm i -g vercel@latest
+          vercel deploy \
+            --prod \
+            --yes \
+            --token=$VERCEL_TOKEN \
+            --org-id=$VERCEL_ORG_ID \
+            --project-id=$VERCEL_PROJECT_ID
         env:
-          RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
