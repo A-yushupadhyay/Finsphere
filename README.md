@@ -5,7 +5,7 @@
 
 
 ---
-Live Demo - URL: [https://your-live-app.vercel.app](https://finsphere-gamma.vercel.app/)
+Live Demo - https://finsphere-gamma.vercel.app/
 
 ---
 See how it look like ->
