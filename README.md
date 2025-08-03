@@ -146,6 +146,7 @@ Railway: Alternative option with PostgreSQL hosting
 
 
 🧠 Future Enhancements
+---
 🤖 AI-Powered Finance Assistant
 
 📈 Real-time Transaction Analytics
@@ -155,6 +156,7 @@ Railway: Alternative option with PostgreSQL hosting
 📓 Auto-generated Changelog via Semantic Release
 
 🔐 Role-based Access Controls (RBAC)
+---
 
 
 🤝 Contributing
@@ -169,18 +171,9 @@ Built with ❤️ by a passionate developer aiming for top 1% SDE excellence.
 
 ---
 
-### ✅ Final Touch
 
-You can now:
 
-1. Add this file as `README.md` in the project root.
-2. Push a commit like:
-   ```bash
-   git add README.md
-   git commit -m "📝 Add MNC-level README with CI/CD + versioning"
-   git push origin main
-   ```
-   
+
 
 
 
