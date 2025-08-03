@@ -1,33 +1,31 @@
-name: Deploy to Vercel
+name: 🛠️ CI/CD Pipeline
 
 on:
   push:
     branches:
-      - main  # Trigger on push to main branch
+      - main
 
 jobs:
   deploy:
+    name: 🚀 Deploy to Vercel
     runs-on: ubuntu-latest
 
     steps:
-      - name: ⬇️ Checkout code
+      - name: 🧾 Checkout code
         uses: actions/checkout@v3
 
-      - name: 📦 Setup Node.js
+      - name: 🟢 Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: 18
 
-      - name: 📥 Install dependencies
-        run: npm ci
+      - name: 📦 Install dependencies
+        run: npm install
 
-      - name: 🧬 Prisma DB Push to Railway
+      - name: ⚙️ Prisma Push (Optional)
         run: npx prisma db push
         env:
           DATABASE_URL: ${{ secrets.RAILWAY_DATABASE_URL }}
-
-      - name: ⚙️ Build Next.js App
-        run: npm run build
 
       - name: 🚀 Deploy to Vercel
         run: |
@@ -36,9 +34,7 @@ jobs:
             --prod \
             --yes \
             --token=$VERCEL_TOKEN \
-            --org-id=$VERCEL_ORG_ID \
             --project-id=$VERCEL_PROJECT_ID
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
