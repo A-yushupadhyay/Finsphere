@@ -20,7 +20,7 @@ export default function KycPage() {
 
   useEffect(() => {
     const fetchKyc = async () => {
-      const res = await fetch('/api/admin/uplaoded-kyc', {
+      const res = await fetch('/api/admin/uploaded-kyc', {
         method: 'GET'});
       if (res.ok) {
         const data = await res.json();
