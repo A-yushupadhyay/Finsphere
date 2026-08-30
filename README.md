@@ -72,8 +72,7 @@ smart-bank/   (src folder based structure)
 
 | Layer         | Tech                          |
 |---------------|-------------------------------|
-| Frontend      | Next.js 14, TypeScript, Tailwind |
-| Backend       | Node.js, API Routes (REST)    |
+| Front + Back  | Next.js 14 with App Router , TypeScript, Tailwind |
 | Database      | PostgreSQL (via Prisma ORM)   |
 | Auth          | Credentials or JWT (NextAuth / Custom) |
 | DevOps        | GitHub Actions (CI/CD)        |
